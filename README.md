@@ -20,15 +20,14 @@
     <tr>
         <td><img src="https://gitee.com/Getawy/zhige/raw/master/doc/pic/Snipaste_2021-04-03_14-25-19.png"/></td>
         <td><img src="https://gitee.com/Getawy/zhige/raw/master/doc/pic/Snipaste_2021-04-03_14-25-47.png"/></td>
-    </tr>
-                                      
+    </tr>                                    
 </table>
 
 ## 演示地址
 目前简单演示,包含基本的websocket通讯演示
 * 后台请求地址 /admin
 * 主页 /blog,/index,/
-* 优惠卷 /taoke
+* 淘客页 /taoke
 qq群:893754716
 [演示地址](https://www.pingpinduo.site)
 
