@@ -542,8 +542,11 @@ public class ExcelUtil<T>
             cell.setCellValue(StringUtils.isNull(value) ? attr.defaultValue() : value + attr.suffix());
         }
         else if (ColumnType.NUMERIC == attr.cellType())
-        {
-            cell.setCellValue(StringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
+        {      
+            if (StringUtils.isNotNull(value))
+            {
+                cell.setCellValue(StringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
+            }
         }
         else if (ColumnType.IMAGE == attr.cellType())
         {

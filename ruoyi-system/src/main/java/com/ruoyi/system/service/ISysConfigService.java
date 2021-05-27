@@ -59,18 +59,28 @@ public interface ISysConfigService {
      */
     public int updateConfig(SysConfig config);
 
-    /**
+       /**
      * 批量删除参数配置信息
      * 
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteConfigByIds(String ids);
+    public void deleteConfigByIds(String ids);
 
     /**
-     * 清空缓存数据
+     * 加载参数缓存数据
      */
-    public void clearCache();
+    public void loadingConfigCache();
+
+    /**
+     * 清空参数缓存数据
+     */
+    public void clearConfigCache();
+
+    /**
+     * 重置参数缓存数据
+     */
+    public void resetConfigCache();
 
     /**
      * 校验参数键名是否唯一

@@ -111,7 +111,7 @@ public class DemoTableController extends BaseController
         return prefix + "/export";
     }
 
-        /**
+    /**
      * 表格导出选择列
      */
     @GetMapping("/exportSelected")
@@ -259,12 +259,21 @@ public class DemoTableController extends BaseController
     }
 
     /**
-     * 表格拖拽操作
+     * 表格行拖拽操作
      */
-    @GetMapping("/reorder")
-    public String reorder()
+    @GetMapping("/reorderRows")
+    public String reorderRows()
     {
-        return prefix + "/reorder";
+        return prefix + "/reorderRows";
+    }
+
+    /**
+     * 表格列拖拽操作
+     */
+    @GetMapping("/reorderColumns")
+    public String reorderColumns()
+    {
+        return prefix + "/reorderColumns";
     }
 
     /**
@@ -437,7 +446,9 @@ class UserTableColumn
 
 class UserTableModel
 {
+    /** 用户ID */
     private int userId;
+
     /** 用户编号 */
     @Excel(name = "用户编号", cellType = ColumnType.NUMERIC)
     private String userCode;

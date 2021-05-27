@@ -13,10 +13,6 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                发送邮箱：
-                                <input type="text" name="fromMail" />
-                            </li>
-                            <li>
                                 接收邮箱：
                                 <input type="text" name="toMail" />
                             </li>
@@ -29,13 +25,13 @@
                                 <input type="text" name="content" />
                             </li>
                             </li>
-                            <li>邮件类型：<select name="emailType" th:with="type=${@dict.getType('oly_mail_type')}">
+                            <li>邮件类型：<select name="mailType" th:with="type=${@dict.getType('oly_mail_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}">
                                 </select>
                             </li>
-                            <li>邮件用途：<select name="emailUsed" th:with="type=${@dict.getType('oly_mail_used')}">
+                            <li>邮件用途：<select name="mailUsed" th:with="type=${@dict.getType('oly_mail_used')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}">
@@ -103,7 +99,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 sortName: "createTime",
-				sortOrder: "desc",
+                sortOrder: "desc",
                 modalName: "邮件记录",
                 columns: [{
                     checkbox: true

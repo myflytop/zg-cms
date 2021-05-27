@@ -124,18 +124,20 @@ public class SysConfigController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(configService.deleteConfigByIds(ids));
+        configService.deleteConfigByIds(ids);
+        return success();
     }
 
     /**
-     * 清空缓存
+     * 刷新参数缓存
      */
     @RequiresPermissions("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
-    @GetMapping("/clearCache")
+    @GetMapping("/refreshCache")
     @ResponseBody
-    public AjaxResult clearCache() {
-        configService.clearCache();
+    public AjaxResult refreshCache()
+    {
+        configService.resetConfigCache();
         return success();
     }
 
@@ -178,7 +180,7 @@ public class SysConfigController extends BaseController {
             }
             i = +1;
         }
-        configService.clearCache();
+        configService.clearConfigCache();;
         return toAjax(i);
     }
 

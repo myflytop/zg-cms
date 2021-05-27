@@ -29,16 +29,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectOlyMailList" parameterType="OlyMail" resultMap="OlyMailResult">
         <include refid="selectOlyMailVo"/>
         <where>  
-            <if test="fromMail != null  and fromMail != ''"> and from_mail like concat('%', #{fromMail}, '%')</if>
             <if test="toMail != null  and toMail != ''"> and to_mail like concat('%', #{toMail}, '%')</if>
             <if test="subject != null  and subject != ''"> and subject like concat('%', #{subject}, '%')</if>
             <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
-            <if test="mailType != null "> and mail_type like concat('%', #{mailType}, '%')</if>
-            <if test="sendTime != null "> and send_time = #{sendTime}</if>
-            <if test="copyTo != null  and copyTo != ''"> and copy_to = #{copyTo}</if>
+            <if test="mailType != null "> and mail_type = #{mailType}</if>
+            <if test="copyTo != null  and copyTo != ''"> and copy_to concat('%', #{copyTo}, '%')</if>
             <if test="mailUsed != null "> and mail_used = #{mailUsed}</if>
             <if test="bccTo != null  and bccTo != ''"> and bcc_to like concat('%', #{bccTo}, '%')</if>
             <if test="visible != null "> and visible = #{visible}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(send_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(send_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
         </where>
     </select>
     

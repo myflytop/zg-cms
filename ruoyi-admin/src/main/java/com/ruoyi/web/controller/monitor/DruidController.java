@@ -21,6 +21,8 @@ public class DruidController extends BaseController
     @GetMapping()
     public String index()
     {
-        return redirect(prefix + "/index");
+        return redirect(prefix + "/index.html");
     }
+
+
 }

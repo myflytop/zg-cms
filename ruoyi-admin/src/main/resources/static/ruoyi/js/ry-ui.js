@@ -61,6 +61,8 @@ var table = {
                     showColumns: true,
                     showToggle: true,
                     showExport: false,
+                    exportDataType: 'all',
+                    exportTypes: ['csv', 'txt', 'doc', 'excel'],
                     clickToSelect: false,
                     singleSelect: false,
                     mobileResponsive: true,
@@ -142,6 +144,8 @@ var table = {
                     responseHandler: $.table.responseHandler,           // 在加载服务器发送来的数据之前处理函数
                     onLoadSuccess: $.table.onLoadSuccess,               // 当所有数据被加载时触发处理函数
                     exportOptions: options.exportOptions,               // 前端导出忽略列索引
+                    exportDataType: options.exportDataType,             // 导出方式（默认all：导出所有数据；basic：导出当前页的数据；selected：导出选中的数据）
+                    exportTypes: options.exportTypes,
                     printPageBuilder: options.printPageBuilder,         // 自定义打印页面模板
                     detailFormatter: options.detailFormatter,           // 在行下面展示其他数据列表
                 });
@@ -244,11 +248,7 @@ var table = {
                     if ($.common.equals("self", target)) {
                         var height = $(this).data('height');
                         var width = $(this).data('width');
-                        // 如果是移动端，就使用自适应大小弹窗
-                        if ($.common.isMobile()) {
-                            width = 'auto';
-                            height = 'auto';
-                        }
+                    
                         layer.open({
                             title: false,
                             type: 1,

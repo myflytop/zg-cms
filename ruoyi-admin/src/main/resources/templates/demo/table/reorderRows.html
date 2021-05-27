@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('导出')" />
+	<th:block th:include="include :: header('表格行拖拽操作')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
 		<div class="row">
 			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table"></table>
+			    <p class="select-title">按住表格行拖拽</p>
+				<table id="bootstrap-table"
+				 data-use-row-attr-func="true"
+				 data-reorderable-rows="true"></table>
 			</div>
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
-    <th:block th:include="include :: bootstrap-table-export-js" />
+    <th:block th:include="include :: bootstrap-table-reorder-row-js" />
     <script th:inline="javascript">
         var prefix = ctx + "demo/table";
         var datas = [[${@dict.getType('sys_normal_disable')}]];
@@ -24,14 +27,11 @@
 		        showRefresh: false,
 		        showToggle: false,
 		        showColumns: false,
-		        showExport: true,
-		        exportDataType: 'selected', // 导出选择数据
-		        exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], // 导出的文件类型
-		        exportOptions: {
-		        	fileName: '用户数据',    // 文件名称设置
-		        	ignoreColumn: [0, 8]    // 忽略第一列和最后一列
+		        onReorderRow: function (data) {
+		        	 //当拖拽结束后，data为整个表格的数据
+		            console.log('拖拽结束' + JSON.stringify(data))
+		            return false;
 		        },
-		        clickToSelect: true,
                 columns: [{
 		            checkbox: true
 		        },
@@ -66,17 +66,7 @@
                     formatter: function(value, row, index) {
                     	return $.table.selectDictLabel(datas, value);
                     }
-                },
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+                }]
             };
             $.table.init(options);
         });

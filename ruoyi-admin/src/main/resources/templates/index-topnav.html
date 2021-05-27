@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>止戈内容管理系统</title>
+    <title>止戈内容系统首页</title>
     <!-- 避免IE使用兼容模式 -->
  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link th:href="@{favicon.ico}" rel="shortcut icon"/>
@@ -26,7 +26,7 @@
         </div>
         <a th:href="@{/index}">
             <li class="logo hidden-xs">
-                <span class="logo-lg">Zhi-Ge</span>
+                <span class="logo-lg">止戈</span>
             </li>
          </a>
         <div class="sidebar-collapse tab-content" id="side-menu">
@@ -137,7 +137,8 @@
 					<li><a class="menuItem" th:href="@{/demo/table/child}">表格父子视图</a></li>
 					<li><a class="menuItem" th:href="@{/demo/table/image}">表格图片预览</a></li>
 					<li><a class="menuItem" th:href="@{/demo/table/curd}">动态增删改查</a></li>
-					<li><a class="menuItem" th:href="@{/demo/table/reorder}">表格拖拽操作</a></li>
+					<li><a class="menuItem" th:href="@{/demo/table/reorderRows}">表格行拖拽操作</a></li>
+					<li><a class="menuItem" th:href="@{/demo/table/reorderColumns}">表格列拖拽操作</a></li>
 					<li><a class="menuItem" th:href="@{/demo/table/resizable}">表格列宽拖动</a></li>
 					<li><a class="menuItem" th:href="@{/demo/table/editable}">表格行内编辑</a></li>
 					<li><a class="menuItem" th:href="@{/demo/table/subdata}">主子表提交</a></li>
@@ -217,7 +218,10 @@
                     <!-- 顶部菜单列表 -->
 	                <th:block th:each="menu : ${menus}">
                	    <li role="presentation" th:id="|tab_${menu.menuId}|">
-                        <a data-toggle="tab" th:class="@{${!#strings.isEmpty(menu.target) && menu.target == 'menuBlank'} ? 'menuBlank'}" th:href="@{${!#strings.isEmpty(menu.target) && menu.target == 'menuBlank'} ? ${menu.url} : |#menu_${menu.menuId}|}">
+               	        <a th:if="${#lists.isEmpty(menu.children)}" data-toggle="tab" th:class="@{${!#strings.isEmpty(menu.target) && menu.target == 'menuBlank'} ? 'menuBlank' : 'menuItem noactive'}" th:href="${menu.url}">
+                            <i th:class="${menu.icon}"></i> <span>[[${menu.menuName}]]</span>
+                        </a>	
+                        <a th:if="${not #lists.isEmpty(menu.children)}" data-toggle="tab" th:class="@{${!#strings.isEmpty(menu.target) && menu.target == 'menuBlank'} ? 'menuBlank'}" th:href="@{${!#strings.isEmpty(menu.target) && menu.target == 'menuBlank'} ? ${menu.url} : |#menu_${menu.menuId}|}">
                             <i th:class="${menu.icon}"></i> <span>[[${menu.menuName}]]</span>
                         </a>
                     </li>
@@ -249,7 +253,7 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li class="mt5">
-								<a th:href="@{/system/user/profile}" class="menuItem">
+								<a th:href="@{/system/user/profile}" class="menuItem noactive">
 								<i class="fa fa-user"></i> 个人中心</a>
 							</li>
 							<li>
@@ -310,8 +314,8 @@
 <script th:src="@{/js/jquery.contextMenu.min.js}"></script>
 <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-<script th:src="@{/ruoyi/js/ry-ui.js?v=4.6.0}"></script>
-<script th:src="@{/ruoyi/js/common.js?v=4.6.0}"></script>
+<script th:src="@{/ruoyi/js/ry-ui.js?v=4.6.1}"></script>
+<script th:src="@{/ruoyi/js/common.js?v=4.6.1}"></script>
 <script th:src="@{/ruoyi/index.js?v=20201208}"></script>
 <script th:src="@{/ajax/libs/fullscreen/jquery.fullscreen.js}"></script>
 <script th:src="@{/js/resize-tabs.js}"></script>
@@ -402,6 +406,19 @@ $(function() {
 	    	}
 	    	$(".navbar-toolbar li a").eq(0).click();
 	    }
+	}
+	
+	/* 初始密码提示 */
+	if([[${isDefaultModifyPwd}]]) {
+		layer.confirm("您的密码还是初始密码，请修改密码！", {
+			icon: 0,
+			title: "安全提示",
+			btn: ['确认'	, '取消'],
+			offset: ['30%']
+		}, function (index) {
+			resetPwd();
+			layer.close(index);
+		});
 	}
 	
 	/* 过期密码提示 */

@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('导出')" />
+	<th:block th:include="include :: header('表格列拖拽操作')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
+        <div class="btn-group-sm" id="toolbar" role="group">
+	        <a class="btn btn-success" onclick="orderColumns()">
+	            <i class="fa fa-refresh"></i> 恢复顺序
+	        </a>
+        </div>
 		<div class="row">
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table"></table>
+			<div class="col-sm-12 select-table table-bordered">
+			    <p class="select-title">按住表格列拖拽</p>
+				<table id="bootstrap-table"
+				 data-reorderable-columns="true"></table>
 			</div>
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
-    <th:block th:include="include :: bootstrap-table-export-js" />
+    <script th:src="@{/js/jquery-ui-1.10.4.min.js}"></script>
+    <th:block th:include="include :: bootstrap-table-reorder-columns-js" />
     <script th:inline="javascript">
         var prefix = ctx + "demo/table";
         var datas = [[${@dict.getType('sys_normal_disable')}]];
@@ -24,18 +32,7 @@
 		        showRefresh: false,
 		        showToggle: false,
 		        showColumns: false,
-		        showExport: true,
-		        exportDataType: 'selected', // 导出选择数据
-		        exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], // 导出的文件类型
-		        exportOptions: {
-		        	fileName: '用户数据',    // 文件名称设置
-		        	ignoreColumn: [0, 8]    // 忽略第一列和最后一列
-		        },
-		        clickToSelect: true,
                 columns: [{
-		            checkbox: true
-		        },
-				{
 					field : 'userId', 
 					title : '用户ID'
 				},
@@ -66,20 +63,22 @@
                     formatter: function(value, row, index) {
                     	return $.table.selectDictLabel(datas, value);
                     }
-                },
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+                }]
             };
             $.table.init(options);
         });
+        
+        function orderColumns() {
+            $('#bootstrap-table').bootstrapTable('orderColumns', {
+            	userId: 0,
+            	userCode: 1,
+            	userName: 2,
+            	userPhone: 3,
+            	userEmail: 4,
+            	userBalance: 5,
+            	status: 6
+            })
+        }
     </script>
 </body>
 </html>

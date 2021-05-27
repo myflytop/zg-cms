@@ -10,6 +10,7 @@ import javax.servlet.Filter;
 
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.security.CipherUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.shiro.realm.UserRealm;
 import com.ruoyi.framework.shiro.session.OnlineSessionDAO;
@@ -107,11 +108,7 @@ public class ShiroConfig {
     @Value("${shiro.cookie.maxAge}")
     private int maxAge;
 
-    /**
-     * 设置cipherKey密钥
-     */
-    @Value("${shiro.cookie.cipherKey}")
-    private String cipherKey;
+  
 
     /**
      * 登录地址
@@ -259,7 +256,7 @@ public class ShiroConfig {
         // 对静态资源设置匿名访问
         filterChainDefinitionMap.put("/favicon.ico**", "anon");
         filterChainDefinitionMap.put("/ruoyi.png**", "anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
+        filterChainDefinitionMap.put("/html/**", "anon");        filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/docs/**", "anon");
         filterChainDefinitionMap.put("/fonts/**", "anon");
         filterChainDefinitionMap.put("/img/**", "anon");
@@ -363,10 +360,11 @@ public class ShiroConfig {
     /**
      * 记住我
      */
-    public CookieRememberMeManager rememberMeManager() {
+    public CookieRememberMeManager rememberMeManager()
+    {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(Base64.decode(cipherKey));
+        cookieRememberMeManager.setCipherKey(CipherUtils.generateNewKey(128, "AES").getEncoded());
         return cookieRememberMeManager;
     }
 

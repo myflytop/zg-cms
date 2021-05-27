@@ -28,15 +28,13 @@ public class SysConfigServiceImpl implements ISysConfigService {
     @Autowired
     private SysConfigMapper configMapper;
 
-    /**
+  /**
      * 项目启动时，初始化参数到缓存
      */
     @PostConstruct
-    public void init() {
-        List<SysConfig> configsList = configMapper.selectConfigList(new SysConfig());
-        for (SysConfig config : configsList) {
-            CacheUtils.put(getCacheName(), getCacheKey(config.getConfigKey()), config.getConfigValue());
-        }
+    public void init()
+    {
+        loadingConfigCache();
     }
 
     /**
@@ -122,30 +120,53 @@ public class SysConfigServiceImpl implements ISysConfigService {
      * @return 结果
      */
     @Override
-    public int deleteConfigByIds(String ids) {
+    public void deleteConfigByIds(String ids)
+    {
         Long[] configIds = Convert.toLongArray(ids);
-        for (Long configId : configIds) {
+        for (Long configId : configIds)
+        {
             SysConfig config = selectConfigById(configId);
-            if (StringUtils.equals(UserConstants.YES, config.getConfigType())) {
+            if (StringUtils.equals(UserConstants.YES, config.getConfigType()))
+            {
                 throw new BusinessException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
             }
+            configMapper.deleteConfigById(configId);
+            CacheUtils.remove(getCacheName(), getCacheKey(config.getConfigKey()));
         }
-        int count = configMapper.deleteConfigByIds(Convert.toStrArray(ids));
-        if (count > 0) {
-
-            CacheUtils.removeAll(getCacheName());
-        }
-        return count;
     }
 
     /**
-     * 清空缓存数据
+     * 加载参数缓存数据
      */
     @Override
-    public void clearCache() {
+    public void loadingConfigCache()
+    {
+        List<SysConfig> configsList = configMapper.selectConfigList(new SysConfig());
+        for (SysConfig config : configsList)
+        {
+            CacheUtils.put(getCacheName(), getCacheKey(config.getConfigKey()), config.getConfigValue());
+        }
+    }
+
+  
+    /**
+     * 清空参数缓存数据
+     */
+    @Override
+    public void clearConfigCache()
+    {
         CacheUtils.removeAll(getCacheName());
     }
 
+    /**
+     * 重置参数缓存数据
+     */
+    @Override
+    public void resetConfigCache()
+    {
+        clearConfigCache();
+        loadingConfigCache();
+    }
     /**
      * 校验参数键名是否唯一
      * 
