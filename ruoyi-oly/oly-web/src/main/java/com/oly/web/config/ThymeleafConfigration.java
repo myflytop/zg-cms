@@ -5,8 +5,11 @@ import javax.annotation.PostConstruct;
 import com.ruoyi.common.config.RuoYiConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 /**
@@ -25,10 +28,9 @@ public class ThymeleafConfigration {
         //模板位置
         resolver.setPrefix(RuoYiConfig.getWorkPath()+"/themes/");
         resolver.setSuffix(".html");
-        resolver.setTemplateMode("HTML5");
+        resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setOrder(templateEngine.getTemplateResolvers().size());
         resolver.setCacheable(false);
-
         templateEngine.addTemplateResolver(resolver);
     }
 
@@ -62,16 +64,16 @@ public class ThymeleafConfigration {
       
 //     }
 
-//     @Bean
-//     public ClassLoaderTemplateResolver thirdTemplateResolver() {
-//         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-//         templateResolver.setPrefix("templates/templatelocation/another/");
-//         templateResolver.setSuffix(".html");
-//         templateResolver.setTemplateMode(TemplateMode.HTML);
-//         templateResolver.setCharacterEncoding("UTF-8");
-//         templateResolver.setOrder(2);
-//         templateResolver.setCheckExistence(true);
+    @Bean
+    public ClassLoaderTemplateResolver thirdTemplateResolver() {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("templates/themes/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setOrder(2);
+        templateResolver.setCheckExistence(true);
 
-//         return templateResolver;
-//     }
+        return templateResolver;
+    }
 }

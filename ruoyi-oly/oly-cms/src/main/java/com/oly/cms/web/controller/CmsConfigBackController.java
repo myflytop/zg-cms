@@ -102,7 +102,7 @@ public class CmsConfigBackController extends CmsCommonController {
             backConfig(configGroup, backTaoPrefix);
             mps=selectConfigValueMap(configGroup);
         }
-        mmap.put("webConfig", mps);
+        mmap.put("taoConfig", mps);
         mmap.put("configGroup", configGroup);
         return prefix + "/taoConfig";
     }
