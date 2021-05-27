@@ -13,12 +13,8 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                模板ID：
-                                <input type="text" name="templateId" />
-                            </li>
-                            <li>
                                 模板名：
-                                <input type="text" name="mouldName" />
+                                <input type="text" name="templateName" />
                             </li>
                             <li>
                                 是否内置：
@@ -30,7 +26,7 @@
                             </li>
                             <li>
                                 状态：
-                                <select name="visible" th:with="type=${@dict.getType('cms_template_visible')}">
+                                <select name="visible" th:with="type=${@dict.getType('oly_template_visible')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
@@ -38,14 +34,14 @@
                             </li>
                             <li>
                                 模板类型：
-                                <select name="templateUsed" th:with="type=${@dict.getType('oly_template_type')}">
+                                <select name="templateType" th:with="type=${@dict.getType('oly_template_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i
                                         class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                         class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -66,18 +62,18 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
+        var prefix = ctx + "oly/template";
         var editFlag = [[${@permission.hasPermi('oly:template:edit') }]];
         var addFlag = [[${@permission.hasPermi('oly:template:add') }]];
         var removeFlag = [[${@permission.hasPermi('oly:template:remove') }]];
         var viewFlag = [[${@permission.hasPermi('oly:template:example') }]];
-        var prefix = ctx + "oly/template";
         var bu = [[${@dict.getType('sys_yes_no') }]];
         var vi = [[${@dict.getType('oly_template_visible') }]];
         var ty = [[${@dict.getType('oly_template_type') }]];
         function viewTemplate(id) {
-                $.modal.openTab('模板展示', prefix + "/example/" + id);
+            $.modal.openTab('模板展示', prefix + "/example/" + id);
 
-            }
+        }
         $(function () {
             var options = {
                 code: "templateId",
@@ -134,7 +130,6 @@
                         return $.table.selectDictLabel(vi, value);
                     }
                 },
-
                 {
                     title: '操作',
                     align: 'left',
@@ -153,7 +148,7 @@
                 }]
             };
             $.treeTable.init(options);
-            
+
         })
     </script>
 </body>
